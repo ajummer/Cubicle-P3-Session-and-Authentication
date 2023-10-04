@@ -41,3 +41,5 @@ exports.updateCube = (cubeId, cubeData) => {
   const cube = Cube.findByIdAndUpdate(cubeId, cubeData);
   return cube;
 };
+
+exports.deleteCube = (cubeId) => Cube.findByIdAndDelete(cubeId);
