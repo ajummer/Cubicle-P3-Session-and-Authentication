@@ -6,7 +6,10 @@ const {
   attachAccessory,
 } = require("../services/cubeService.js");
 
-const { getAllAccessories,getWithoutOwned } = require("../services/accessoryService.js");
+const {
+  getAllAccessories,
+  getWithoutOwned,
+} = require("../services/accessoryService.js");
 
 router.get("/create", (req, res) => {
   res.render("create");
@@ -19,6 +22,7 @@ router.post("/create", async (req, res) => {
     description,
     imageUrl,
     difficultyLevel: Number(difficultyLevel),
+    owner: req.user._id,
   });
   res.redirect("/");
 });
@@ -35,10 +39,9 @@ router.get("/details/:id", async (req, res) => {
 
 router.get("/details/:id/attach-accessory", async (req, res) => {
   const cube = await getSingleCube(req.params.id).lean();
-  console.log(cube.accessories)
-  
+
   const accessories = await getWithoutOwned(cube.accessories).lean();
- 
+
   const hasAccessories = accessories.length > 0;
   res.render("accessories/attach", { accessories, cube, hasAccessories });
 });
@@ -47,7 +50,7 @@ router.post("/details/:id/attach-accessory", async (req, res) => {
   const cubeId = req.params.id;
   const accessoryId = req.body.accessory;
   await attachAccessory(cubeId, accessoryId);
-  res.redirect(`/cubes/details/${cubeId}`)
+  res.redirect(`/cubes/details/${cubeId}`);
 });
 
 module.exports = router;

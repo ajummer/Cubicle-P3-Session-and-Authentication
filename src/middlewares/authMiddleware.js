@@ -3,10 +3,11 @@ const { SECRET } = require("../constans.js");
 
 exports.auth = async (req, res, next) => {
   const token = req.cookies.auth;
+ 
 
   if (token) {
     try {
-      const user = await jwt.sign(token, SECRET);
+      const user = await jwt.verify(token, SECRET);
       req.user = user;
       next()
     } catch (err) {
