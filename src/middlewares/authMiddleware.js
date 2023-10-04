@@ -8,6 +8,7 @@ exports.auth = async (req, res, next) => {
     try {
       const user = await jwt.sign(token, SECRET);
       req.user = user;
+      next()
     } catch (err) {
       res.clearCookie("auth");
       res.redirect("/users/login");
