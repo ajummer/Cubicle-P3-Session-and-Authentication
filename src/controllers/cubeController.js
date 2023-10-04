@@ -1,14 +1,13 @@
 const router = require("express").Router();
 const {
   createCube,
-  getAllCubes,
   getSingleCube,
   attachAccessory,
   updateCube,
+  deleteCube,
 } = require("../services/cubeService.js");
 
 const {
-  getAllAccessories,
   getWithoutOwned,
 } = require("../services/accessoryService.js");
 
@@ -18,6 +17,7 @@ router.get("/create", (req, res) => {
 
 router.post("/create", async (req, res) => {
   const { name, description, imageUrl, difficultyLevel } = req.body;
+
   const newCube = await createCube({
     name,
     description,
@@ -61,13 +61,20 @@ router.get("/details/:id/edit", async (req, res) => {
 
 router.post("/details/:id/edit", async (req, res) => {
   const cubeData = req.body;
-  await updateCube(req.params.id, cubeData);
-  res.redirect(`/cubes/details/${req.params.id}`)
+  const cubeId = req.params.id;
+  await updateCube(cubeId, cubeData);
+  res.redirect(`/cubes/details/${req.params.id}`);
 });
 
-router.get("/details/:id/delete", async (req,res) => {
+router.get("/details/:id/delete", async (req, res) => {
   const cube = await getSingleCube(req.params.id).lean();
   res.render("cubes/delete", { cube });
-})
+});
+
+router.post("/details/:id/delete", async (req, res) => {
+  const cubeId = req.params.id;
+  await deleteCube(cubeId);
+  res.redirect("/");
+});
 
 module.exports = router;
