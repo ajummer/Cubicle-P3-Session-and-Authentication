@@ -12,7 +12,7 @@ const {
 } = require("../services/accessoryService.js");
 
 router.get("/create", (req, res) => {
-  res.render("create");
+  res.render("cubes/create");
 });
 
 router.post("/create", async (req, res) => {
@@ -34,7 +34,7 @@ router.get("/details/:id", async (req, res) => {
     return;
   }
 
-  res.render("details", { cube });
+  res.render("cubes/details", { cube });
 });
 
 router.get("/details/:id/attach-accessory", async (req, res) => {
@@ -51,6 +51,11 @@ router.post("/details/:id/attach-accessory", async (req, res) => {
   const accessoryId = req.body.accessory;
   await attachAccessory(cubeId, accessoryId);
   res.redirect(`/cubes/details/${cubeId}`);
+});
+
+router.get("/details/:id/edit", async (req, res) => {
+  const cube = await getSingleCube(req.params.id).lean();
+  res.render("cubes/edit", { cube });
 });
 
 module.exports = router;
