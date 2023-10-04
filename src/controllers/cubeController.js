@@ -4,6 +4,7 @@ const {
   getAllCubes,
   getSingleCube,
   attachAccessory,
+  updateCube,
 } = require("../services/cubeService.js");
 
 const {
@@ -56,6 +57,13 @@ router.post("/details/:id/attach-accessory", async (req, res) => {
 router.get("/details/:id/edit", async (req, res) => {
   const cube = await getSingleCube(req.params.id).lean();
   res.render("cubes/edit", { cube });
+});
+
+router.post("/details/:id/edit", async (req, res) => {
+  const cubeData = req.body;
+  await updateCube(req.params.id, cubeData);
+  res.redirect(`/cubes/details/${req.params.id}`)
+
 });
 
 module.exports = router;
