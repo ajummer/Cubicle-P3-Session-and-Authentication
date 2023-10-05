@@ -11,6 +11,8 @@ const {
   getWithoutOwned,
 } = require("../services/accessoryService.js");
 
+const { getDifficultyLevel } = require("../utils/utils.js")
+
 router.get("/create", (req, res) => {
   res.render("cubes/create");
 });
@@ -56,7 +58,8 @@ router.post("/details/:id/attach-accessory", async (req, res) => {
 
 router.get("/details/:id/edit", async (req, res) => {
   const cube = await getSingleCube(req.params.id).lean();
-  res.render("cubes/edit", { cube });
+  const options = getDifficultyLevel(cube.difficultyLevel)
+  res.render("cubes/edit", { cube , options });
 });
 
 router.post("/details/:id/edit", async (req, res) => {
