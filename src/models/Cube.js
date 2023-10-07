@@ -16,7 +16,7 @@ const cubeSchema = new mongoose.Schema({
   imageUrl: {
     type: String,
     required: [true, "Cube image is required !"],
-    match: [/[https?://[^\s]+]/, "Cube imageUrl should start with http or https"],
+    match: [/^(http|https):\/\//, "Cube imageUrl should start with http or https"],
   },
   difficultyLevel: Number,
   accessories: [
