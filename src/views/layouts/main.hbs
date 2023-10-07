@@ -26,11 +26,11 @@
 
         </ul>
       </header>
-      {{#if errMessage}}
+      {{#each errMessages}}
       <div id="notifications">
-        <p id="notification-message">{{errMessage}}</p>
+        <p id="notification-message">{{this}}</p>
       </div>
-      {{/if}}
+      {{/each}}
       {{{body}}}
     </div>
     <footer>@Cubicle: Exercise for Express.js and Handlebars</footer>

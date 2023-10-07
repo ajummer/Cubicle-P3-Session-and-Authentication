@@ -12,8 +12,8 @@ router.post("/login", async (req, res) => {
     res.cookie("auth", token, { httpOnly: true });
     res.redirect("/");
   } catch (err) {
-    const errMessage = err.message
-    res.status(404).render("users/login", { errMessage });
+    const errMessages = [err.message];
+    res.status(404).render("users/login", { errMessages });
   }
 });
 
@@ -23,8 +23,13 @@ router.get("/register", (req, res) => {
 
 router.post("/register", async (req, res) => {
   const { username, password, repeatPassword } = req.body;
-  await userServices.register({ username, password, repeatPassword });
-  res.redirect("/users/login");
+  try {
+    await userServices.register({ username, password, repeatPassword });
+    res.redirect("/users/login");
+  } catch (err) {
+    const errMessages = Object.values(err.errors).map((err) => err.message);
+    res.status(404).render("users/register", { errMessages: errMessages });
+  }
 });
 
 router.get("/logout", (req, res) => {
