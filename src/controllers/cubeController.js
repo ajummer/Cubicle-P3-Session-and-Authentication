@@ -36,6 +36,7 @@ router.post("/create", isAuth, async (req, res) => {
 });
 
 router.get("/details/:id", async (req, res) => {
+  
   const cube = await getSingleCube(req.params.id).lean();
   if (!cube) {
     res.redirect("/404");
@@ -48,7 +49,10 @@ router.get("/details/:id", async (req, res) => {
 
 router.get("/details/:id/attach-accessory", isAuth, async (req, res) => {
   const cube = await getSingleCube(req.params.id).lean();
-
+  if (!cube) {
+    res.redirect("/404");
+    return;
+  }
   const accessories = await getWithoutOwned(cube.accessories).lean();
 
   const hasAccessories = accessories.length > 0;
