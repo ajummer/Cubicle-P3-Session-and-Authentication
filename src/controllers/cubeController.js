@@ -20,14 +20,19 @@ router.get("/create", isAuth,  (req, res) => {
 router.post("/create", isAuth, async (req, res) => {
   const { name, description, imageUrl, difficultyLevel } = req.body;
 
-  const newCube = await createCube({
-    name,
-    description,
-    imageUrl,
-    difficultyLevel: Number(difficultyLevel),
-    owner: req.user._id,
-  });
-  res.redirect("/");
+  try {
+    const newCube = await createCube({
+      name,
+      description,
+      imageUrl,
+      difficultyLevel: Number(difficultyLevel),
+      owner: req.user._id,
+    });
+    res.redirect("/");
+  } catch (err) {
+    const errMessages = Object.values(err.errors).map((err) => err.message);
+    res.status(400).render("cubes/create", { errMessages: errMessages });
+  }
 });
 
 router.get("/details/:id", async (req, res) => {
