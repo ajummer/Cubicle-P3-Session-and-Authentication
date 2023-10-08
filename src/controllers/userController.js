@@ -27,7 +27,6 @@ router.post("/register", async (req, res) => {
     await userServices.register({ username, password, repeatPassword });
     res.redirect("/users/login");
   } catch (err) {
-    console.log(err);
     // if there are multiple errors it will map the errors , but if there is only one error it will return the error message like an array because  handlebars {{#each}} requires an array to itterate 
     const errMessages = err.errors
       ? Object.values(err.errors).map((err) => err.message)

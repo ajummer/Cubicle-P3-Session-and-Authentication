@@ -3,7 +3,15 @@ const bcrypt = require("bcrypt");
 const jwt = require("../lib/jwt.js");
 const { SECRET } = require("../constans.js");
 
-exports.register = (userData) => User.create(userData);
+exports.register = async (userData) => {
+  const { username } = userData;
+  const userExists = await User.exists({ username });
+  if (userExists) {
+    throw new Error("Username already exists");
+  } else {
+    User.create(userData);
+  }
+};
 
 exports.login = async (username, password) => {
   // Find user
